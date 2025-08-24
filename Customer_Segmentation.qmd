@@ -1,0 +1,609 @@
+---
+title: "Customer Segmentation"
+author: "Navaneeth Chandran V"
+format: html
+editor: visual
+---
+
+------------------------------------------------------------------------
+
+------------------------------------------------------------------------
+
+## Market Segmentation Report
+
+The KTC company would like to segment their customer base based on their characteristics. The company has data of the customers needed for segmentation. To better improve customer relations.
+
+## 1. Introduction
+
+The KTC company would like to segment their customer base based on their characteristics.The company has data of the customers needed for segmentation we will use the segmented data to better improve customer relations.
+
+## 2. Descriptive Mining
+
+Customer group of KTC
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+#=======================================================================
+
+# Rattle is Copyright (c) 2006-2021 Togaware Pty Ltd.
+# It is free (as in libre) open source software.
+# It is licensed under the GNU General Public License,
+# Version 2. Rattle comes with ABSOLUTELY NO WARRANTY.
+# Rattle was written by Graham Williams with contributions
+# from others as acknowledged in 'library(help=rattle)'.
+# Visit https://rattle.togaware.com/ for details.
+
+#=======================================================================
+# Rattle timestamp: 2025-07-24 18:48:29.008513 x86_64-w64-mingw32 
+
+# Rattle version 5.5.1 user 'Navaneeth'
+
+# This log captures interactions with Rattle as an R script. 
+
+# For repeatability, export this activity log to a 
+# file, like 'model.R' using the Export button or 
+# through the Tools menu. Th script can then serve as a 
+# starting point for developing your own scripts. 
+# After xporting to a file called 'model.R', for exmample, 
+# you can type into a new R Console the command 
+# "source('model.R')" and so repeat all actions. Generally, 
+# you will want to edit the file to suit your own needs. 
+# You can also edit this log in place to record additional 
+# information before exporting the script. 
+ 
+# Note that saving/loading projects retains this log.
+
+# We begin most scripts by loading the required packages.
+# Here are some initial packages to load and others will be
+# identified as we proceed through the script. When writing
+# our own scripts we often collect together the library
+# commands at the beginning of the script here.
+
+library(rattle)   # Access the weather dataset and utilities.
+library(magrittr) # Utilise %>% and %<>% pipeline operators.
+
+# This log generally records the process of building a model. 
+# However, with very little effort the log can also be used 
+# to score a new dataset. The logical variable 'building' 
+# is used to toggle between generating transformations, 
+# when building a model and using the transformations, 
+# when scoring a dataset.
+
+building <- TRUE
+scoring  <- ! building
+
+# A pre-defined value is used to reset the random seed 
+# so that results are repeatable.
+
+crv$seed <- 42 
+
+#=======================================================================
+# Rattle timestamp: 2025-07-24 18:56:17.934233 x86_64-w64-mingw32 
+
+# Load a dataset from file.
+
+library(readxl, quietly=TRUE)
+
+ crs$dataset <- read_excel("C:/Users/Navaneeth/OneDrive/Desktop/DemoKTC.xlsx", guess_max=1e4)
+
+ crs$dataset
+
+#=======================================================================
+# Rattle timestamp: 2025-07-24 18:56:18.440785 x86_64-w64-mingw32 
+
+# Action the user selections from the Data tab. 
+
+# Build the train/validate/test datasets.
+
+# nobs=30 train=21 validate=4 test=5
+
+set.seed(crv$seed)
+
+crs$nobs <- nrow(crs$dataset)
+
+crs$train <- sample(crs$nobs, 0.7*crs$nobs)
+
+crs$nobs %>%
+  seq_len() %>%
+  setdiff(crs$train) %>%
+  sample(0.15*crs$nobs) ->
+crs$validate
+
+crs$nobs %>%
+  seq_len() %>%
+  setdiff(crs$train) %>%
+  setdiff(crs$validate) ->
+crs$test
+
+# The following variable selections have been noted.
+
+crs$input     <- c("Age", "Female", "Income", "Married",
+                   "Children", "Loan")
+
+crs$numeric   <- c("Age", "Female", "Income", "Married",
+                   "Children", "Loan")
+
+crs$categoric <- NULL
+
+crs$target    <- "Mortgage"
+crs$risk      <- NULL
+crs$ident     <- NULL
+crs$ignore    <- NULL
+crs$weights   <- NULL
+
+#=======================================================================
+# Rattle timestamp: 2025-07-24 18:56:22.656201 x86_64-w64-mingw32 
+
+# Action the user selections from the Data tab. 
+
+# Build the train/validate/test datasets.
+
+# nobs=30 train=21 validate=4 test=5
+
+set.seed(crv$seed)
+
+crs$nobs <- nrow(crs$dataset)
+
+crs$train <- sample(crs$nobs, 0.7*crs$nobs)
+
+crs$nobs %>%
+  seq_len() %>%
+  setdiff(crs$train) %>%
+  sample(0.15*crs$nobs) ->
+crs$validate
+
+crs$nobs %>%
+  seq_len() %>%
+  setdiff(crs$train) %>%
+  setdiff(crs$validate) ->
+crs$test
+
+# The following variable selections have been noted.
+
+crs$input     <- c("Age", "Female", "Income", "Married",
+                   "Children", "Loan", "Mortgage")
+
+crs$numeric   <- c("Age", "Female", "Income", "Married",
+                   "Children", "Loan", "Mortgage")
+
+crs$categoric <- NULL
+
+crs$target    <- NULL
+crs$risk      <- NULL
+crs$ident     <- NULL
+crs$ignore    <- NULL
+crs$weights   <- NULL
+
+#=======================================================================
+# Rattle timestamp: 2025-07-24 18:56:48.284233 x86_64-w64-mingw32 
+
+# Action the user selections from the Data tab. 
+
+# Build the train/validate/test datasets.
+
+# nobs=30 train=21 validate=4 test=5
+
+set.seed(crv$seed)
+
+crs$nobs <- nrow(crs$dataset)
+
+crs$train <- sample(crs$nobs, 0.7*crs$nobs)
+
+crs$nobs %>%
+  seq_len() %>%
+  setdiff(crs$train) %>%
+  sample(0.15*crs$nobs) ->
+crs$validate
+
+crs$nobs %>%
+  seq_len() %>%
+  setdiff(crs$train) %>%
+  setdiff(crs$validate) ->
+crs$test
+
+# The following variable selections have been noted.
+
+crs$input     <- c("Age", "Female", "Income", "Married",
+                   "Children", "Loan", "Mortgage")
+
+crs$numeric   <- c("Age", "Female", "Income", "Married",
+                   "Children", "Loan", "Mortgage")
+
+crs$categoric <- NULL
+
+crs$target    <- NULL
+crs$risk      <- NULL
+crs$ident     <- NULL
+crs$ignore    <- NULL
+crs$weights   <- NULL
+```
+
+### 2.1 Data Exploration
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Rattle timestamp: 2025-07-24 19:00:11.668802 x86_64-w64-mingw32 
+
+# Action the user selections from the Data tab. 
+
+# The following variable selections have been noted.
+
+crs$input     <- c("Age", "Female", "Income", "Married",
+                   "Children", "Loan", "Mortgage")
+
+crs$numeric   <- c("Age", "Female", "Income", "Married",
+                   "Children", "Loan", "Mortgage")
+
+crs$categoric <- NULL
+
+crs$target    <- NULL
+crs$risk      <- NULL
+crs$ident     <- NULL
+crs$ignore    <- NULL
+crs$weights   <- NULL
+
+#=======================================================================
+# Rattle timestamp: 2025-07-24 19:00:18.531933 x86_64-w64-mingw32 
+
+# The 'Hmisc' package provides the 'contents' function.
+
+library(Hmisc, quietly=TRUE)
+
+# Obtain a summary of the dataset.
+
+contents(crs$dataset[, c(crs$input, crs$risk, crs$target)])
+summary(crs$dataset[, c(crs$input, crs$risk, crs$target)])
+```
+
+We have information regarding 30 customers of KTC company. We have details of their age, gender, income, marital Status, dependents (number of children), financial Status including whether they have a car loan or a mortgage. We also check that all the entries have been taken into account.
+
+#### 2.1.1 Age
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Rattle timestamp: 2025-07-24 19:04:05.523028 x86_64-w64-mingw32 
+
+# Display box plots for the selected variables. 
+
+# Use ggplot2 to generate box plot for Age
+
+# Generate a box plot.
+
+p01 <- crs %>%
+  with(dataset[,]) %>%
+  ggplot2::ggplot(ggplot2::aes(y=Age)) +
+  ggplot2::geom_boxplot(ggplot2::aes(x="All"), notch=TRUE, fill="grey") +
+  ggplot2::stat_summary(ggplot2::aes(x="All"), fun.y=mean, geom="point", shape=8) +
+  ggplot2::xlab("Rattle 2025-Jul-24 19:04:05 Navaneeth") +
+  ggplot2::ggtitle("Distribution of Age") +
+  ggplot2::theme(legend.position="none")
+
+# Display the plots.
+
+gridExtra::grid.arrange(p01)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Rattle timestamp: 2025-07-24 21:25:29.939495 x86_64-w64-mingw32 
+
+# Display histogram plots for the selected variables. 
+
+# Use ggplot2 to generate histogram plot for Age
+
+# Generate the plot.
+
+p01 <- crs %>%
+  with(dataset[,]) %>%
+  dplyr::select(Age) %>%
+  ggplot2::ggplot(ggplot2::aes(x=Age)) +
+  ggplot2::geom_density(lty=3) +
+  ggplot2::xlab("Age\n\nRattle 2025-Jul-24 21:25:29 Navaneeth") +
+  ggplot2::ggtitle("Distribution of Age") +
+  ggplot2::labs(y="Density")
+
+# Display the plots.
+
+gridExtra::grid.arrange(p01)
+```
+
+We see that there are no outliers from the box plot, from the histogram we can see that most of the people are in the 50s to 60s age and the histogram is left skewed, meaning there are less younger people in the data set.
+
+After exploring the data we see that the minimum age in the customer data set is 22 , the maximum age is 66 and the average age is 45.97
+
+#### 2.1.2 Income
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Rattle timestamp: 2025-07-24 20:41:15.301261 x86_64-w64-mingw32 
+
+# Display box plots for the selected variables. 
+
+# Use ggplot2 to generate box plot for Income
+
+# Generate a box plot.
+
+p01 <- crs %>%
+  with(dataset[train,]) %>%
+  ggplot2::ggplot(ggplot2::aes(y=Income)) +
+  ggplot2::geom_boxplot(ggplot2::aes(x="All"), notch=TRUE, fill="grey") +
+  ggplot2::stat_summary(ggplot2::aes(x="All"), fun.y=mean, geom="point", shape=8) +
+  ggplot2::xlab("Rattle 2025-Jul-24 20:41:15 Navaneeth") +
+  ggplot2::ggtitle("Distribution of Income (sample)") +
+  ggplot2::theme(legend.position="none")
+
+# Display the plots.
+
+gridExtra::grid.arrange(p01)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Rattle timestamp: 2025-07-24 21:23:28.935635 x86_64-w64-mingw32 
+
+# Display histogram plots for the selected variables. 
+
+# Use ggplot2 to generate histogram plot for Income
+
+# Generate the plot.
+
+p01 <- crs %>%
+  with(dataset[,]) %>%
+  dplyr::select(Income) %>%
+  ggplot2::ggplot(ggplot2::aes(x=Income)) +
+  ggplot2::geom_density(lty=3) +
+  ggplot2::xlab("Income\n\nRattle 2025-Jul-24 21:23:28 Navaneeth") +
+  ggplot2::ggtitle("Distribution of Income") +
+  ggplot2::labs(y="Density")
+
+# Display the plots.
+
+gridExtra::grid.arrange(p01)
+```
+
+We can see from the summary that the minimum family income is 8877\$, the maximum income is 59804\$ and the average is 28012\$.
+
+We can see from the histogram that the distribution of age is left skewed and the distribution of income is right skewed from this we can see that very few people have incomes in the 30,000 and above range.
+
+#### 2.1.3 Gender
+
+We can see that majority of the customers are female.
+
+#### 2.1.4 Marital Status
+
+The data shows that 80 percent are married in the customer data
+
+#### 2.1.5 Number of children
+
+The data shows that customers has children in the range 0-3, we see from the average that the majority of customers don't have children
+
+#### 2.1.6 Loan
+
+We can see that majority of the customers do not have loans and about 43% has loans
+
+#### 2.1.7 Mortgage
+
+We can see from the data that majority of the customers do not have a mortgage only about 40% of the customers in the data set has a mortgage.
+
+## 3 Segmentation using Clustering
+
+We conduct cluster analysis on the data of customers from the KTC company to group similar customers together in order to identify further patterns.
+
+#### 3.1 Hierarchical Clustering
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Rattle timestamp: 2025-07-24 19:10:29.074469 x86_64-w64-mingw32 
+
+# Hierarchical Cluster 
+
+# Generate a hierarchical cluster from the numeric data.
+
+crs$dataset[, crs$numeric] %>%
+  amap::hclusterpar(method="euclidean", link="ward", nbproc=1) ->
+crs$hclust
+
+# Time taken: 0.16 secs
+
+#=======================================================================
+# Rattle timestamp: 2025-07-24 19:10:31.709736 x86_64-w64-mingw32 
+
+# Dendrogram Plot 
+
+# The 'ggplot2' package provides the 'ggplot' function.
+
+library(ggplot2, quietly=TRUE)
+
+# The 'ggdendro' package provides the 'dendro_data' function.
+
+library(ggdendro, quietly=TRUE)
+
+# Generate the dendrogram plot.
+
+ddata <- dendro_data(crs$hclust, type="rectangle")
+g <- ggplot(segment(ddata))
+g <- g + geom_segment(aes(x = y, y = x, xend = yend, yend = xend))
+g <- g + scale_y_discrete(labels = ddata$label$label)
+g <- g + labs(x="Height", y="Observation")
+g <- g + ggtitle(expression(atop("Cluster Dendrogram DemoKTC.xlsx", atop(italic("Rattle 2025-Jul-24 19:10:31 Navaneeth")))))
+print(g)
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(readxl)
+crs$dataset <- read_excel("C:/Users/Navaneeth/OneDrive/Desktop/DemoKTC.xlsx", guess_max=1e4)
+mydata<-scale(crs$dataset)
+d <- dist(mydata, method = "manhattan") # distance matrix
+fit <- hclust(d, method="ward") # Clustering
+plot(fit) # display dendogram
+groups <- cutree(fit, k=5) # cut tree into 5 clusters
+#draw dendogram with red borders around the 5 clusters
+rect.hclust(fit, k=3, border="red")
+```
+
+From the dendogram we see that 5 is a good cluster size when doing K-means Clustering.
+
+#### 3.2 K means Clustering
+
+K-means is an unsupervised machine learning algorithm used to partition a dataset into K distinct, non-overlapping clusters based on similarity.It organizes observations into similar groups.
+
+```         
+```
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Rattle timestamp: 2025-07-24 19:46:09.106563 x86_64-w64-mingw32 
+
+# KMeans 
+
+# Reset the random number seed to obtain the same results each time.
+
+set.seed(crv$seed)
+
+# The 'reshape' package provides the 'rescaler' function.
+
+library(reshape, quietly=TRUE)
+
+# Generate a kmeans cluster of size 5.
+
+crs$kmeans <- kmeans(sapply(na.omit(crs$dataset[, crs$numeric]), rescaler, "range"), 5)
+
+#=======================================================================
+# Rattle timestamp: 2025-07-24 19:46:09.369996 x86_64-w64-mingw32 
+
+# Report on the cluster characteristics. 
+
+# Cluster sizes:
+
+paste(crs$kmeans$size, collapse=' ')
+
+# Data means:
+
+colMeans(sapply(na.omit(crs$dataset[, crs$numeric]), rescaler, "range"))
+
+# Cluster centers:
+
+crs$kmeans$centers
+
+# Within cluster sum of squares:
+
+crs$kmeans$withinss
+
+# Time taken: 0.00 secs
+
+# Generate a discriminant coordinates plot.
+
+cluster::clusplot(na.omit(crs$dataset[, intersect(crs$input, crs$numeric)]), crs$kmeans$cluster, color=TRUE, shade=TRUE, main='Discriminant Coordinates DemoKTC.xlsx')
+```
+
+We see that K-means clustering with 5 clusters has a lot of overlapping, to find the optimal number of clusters we find the elbow plot
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(factoextra)
+library(cluster)
+library(readxl, quietly=TRUE)
+mydata <- crs$dataset
+data <- scale(mydata)  
+fviz_nbclust(data, kmeans, method = "wss")
+set.seed(123)  # For reproducibility
+km <- kmeans(data, centers = 3, nstart = 25)
+set.seed(123)  # For reproducibility
+km <- kmeans(data, centers = 3, nstart = 25)
+fviz_cluster(km, data)
+data2<-data# duplicating the data
+data2$cluster<-km$cluster# writing the cluster membership in to the data
+data2$cluster
+```
+
+We can see from the elbow plot that the optimal number of clusters is 3
+
+When we do k-means clustering with 5 clusters we see that the overlapping between some of the clusters will be high and to reduce the overlapping we reduce the number of clusters to 3
+
+After reducing the cluster size to 3 we can see that the overlapping between clusters have been reduced.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+# Create a copy of the original dataset (using only rows used in clustering)
+data2 <- na.omit(crs$dataset[, crs$numeric])
+
+# Add cluster membership from the kmeans result
+data2$cluster_id <- crs$kmeans$cluster
+
+# Clean column names to avoid issues in aggregation
+names(data2) <- make.names(names(data2), unique = TRUE)
+
+# Compute mean of each variable per cluster
+group_means <- aggregate(. ~ cluster_id, data = data2, FUN = mean)
+
+# Split data by cluster_id
+grouped_data <- split(data2, data2$cluster_id)
+
+# Extract individual cluster datasets
+data_cluster1 <- grouped_data[[1]]
+data_cluster2 <- grouped_data[[2]]
+data_cluster3 <- grouped_data[[3]]
+
+# Print group-wise means
+print(group_means)
+# KMeans 
+
+# Reset the random number seed to obtain the same results each time.
+
+set.seed(crv$seed)
+
+# The 'reshape' package provides the 'rescaler' function.
+
+library(reshape, quietly=TRUE)
+
+# Generate a kmeans cluster of size 3.
+
+crs$kmeans <- kmeans(sapply(na.omit(crs$dataset[, crs$numeric]), rescaler, "range"), 3)
+# Report on the cluster characteristics. 
+
+# Cluster sizes:
+
+paste(crs$kmeans$size, collapse=' ')
+
+# Data means:
+
+colMeans(sapply(na.omit(crs$dataset[, crs$numeric]), rescaler, "range"))
+
+# Cluster centers:
+
+crs$kmeans$centers
+
+# Within cluster sum of squares:
+
+crs$kmeans$withinss
+
+# Time taken: 0.00 secs
+
+# Generate a discriminant coordinates plot.
+
+cluster::clusplot(na.omit(crs$dataset[, intersect(crs$input, crs$numeric)]), crs$kmeans$cluster, color=TRUE, shade=TRUE, main='Discriminant Coordinates DemoKTC.xlsx')
+
+```
+
+```{r}
+# Create a copy of the original dataset (using only rows used in clustering)
+data2 <- na.omit(crs$dataset[, crs$numeric])
+
+# Add cluster membership from the kmeans result
+data2$cluster_id <- crs$kmeans$cluster
+
+# Clean column names to avoid issues in aggregation
+names(data2) <- make.names(names(data2), unique = TRUE)
+
+# Compute mean of each variable per cluster
+group_means <- aggregate(. ~ cluster_id, data = data2, FUN = mean)
+
+# Split data by cluster_id
+grouped_data <- split(data2, data2$cluster_id)
+
+# Extract individual cluster datasets
+data_cluster1 <- grouped_data[[1]]
+data_cluster2 <- grouped_data[[2]]
+data_cluster3 <- grouped_data[[3]]
+
+# Print group-wise means
+print(group_means)
+```
+
+The KTC company customers have been reduced to 3 clusters now
+
+Cluster one has an average age of 45 with mostly married individuals who most likely have children , they are individuals who have dependents
+
+Cluster two is has the highest average age and the highest income they have the the lowest mortgage numbers and loans among the group.
+
+Cluster three has a average age of 35 and has the lowest income among the group they have a moderate chance of having loans and mortgages.

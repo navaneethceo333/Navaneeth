@@ -1,0 +1,60 @@
+---
+title: "Market Basket Analysis"
+author: "Navaneeth chandran V"
+format: html
+editor: visual
+---
+
+## Market Basket Analysis
+
+## 1.Introduction
+
+1.  market basket analysis is used for unerstanding the association between items in a customer basket based on th frequency of those items in the customer's basket. it helps in identifying customer buying patterns and predict purchases based on the available customer purchase data. Support and confidence are used for identifying the association rules. Association rules are evaluated using the lift ratio.
+
+## 2.Market Basket Analysis using data from Kaggle.
+
+```{r echo=FALSE, warning=FALSE, message=FALSE}
+groceries_dataset<-read.csv("C:/Users/Navaneeth/OneDrive/Desktop/Groceries_dataset.csv")
+head(groceries_dataset)
+tail(groceries_dataset)
+str(groceries_dataset)
+length(unique(groceries_dataset$Member_number))
+```
+
+### 2.1 Data Exploration
+
+the groceries_data set has 38765 observations and 3 features including transaction id(member_number), date and item description. There are 3898 members in this transaction data.
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+#install.packages("tidyverse")
+```
+
+## 2.2 Association Rule Mining
+
+```{r echo=FALSE, message=FALSE, warning=FALSE}
+library(dplyr) #Call dplayer
+transaction_data<-groceries_dataset%>%
+  group_by(Member_number,Date)%>%
+  summarize(items=list(itemDescription),.groups="drop")
+library(arules)
+#transaction_data
+#create transaction object
+transactions_list<-as(transaction_data$items,"transactions")
+#create association rules
+rules<-apriori(transactions_list,parameter=list(support=0.0005,conf=0.2,minlen=2))
+inspect(head(rules,10))
+```
+
+Association rules were generated with a minimum support of 0.0005, a minimum confidence of 0.2, and a minimum length of 2. The results indicate that approximately 10 items are associated with one another, with the majority of these associations involving whole milk.
+
+### 2.3 Results
+
+Using association rule mining with support = 0.0005, confidence = 0.2, and minimum length = 2, about ten rules were identified. Most of these rules involve whole milk, which frequently appears as a common item in customer baskets. An exception was the association between spices and soda, suggesting occasional niche purchasing patterns.
+
+### 2.4 Inference
+
+The strong presence of whole milk highlights its role as a staple product and a driver of other purchases. Retailers can use this insight for product bundling, cross-selling, or store placement strategies. The spices–soda rule, while less frequent, indicates opportunities to target special consumption occasions.
+
+### 2.5 Conclusions
+
+Market basket analysis reveals that whole milk dominates customer baskets, making it a key product for promotions and cross-selling. At the same time, smaller associations point to niche behaviors that businesses can leverage for targeted marketing.
