@@ -1,76 +1,385 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Assignment Blog</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
-      color: white;
-      text-align: center;
-    }
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>My Assignment Blog — Verified Colorful Brand Wall</title>
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;width:100%}
+  body{
+    font-family: Inter, Arial, sans-serif;
+    background:#ffffff;            /* pure white */
+    color:#222;
+    overflow:hidden;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    padding:36px;
+  }
 
-    h1 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-    }
+  /* content card */
+  .card {
+    position: relative;
+    z-index: 6;
+    width: min(980px, 94%);
+    text-align: center;
+    background: rgba(255,255,255,0.95);
+    border-radius: 14px;
+    padding: 28px;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.06);
+  }
 
-    p {
-      font-size: 1.2rem;
-      margin-bottom: 30px;
-      max-width: 600px;
-    }
+  h1 { font-size: 2.2rem; margin-bottom:8px; }
+  p  { color:#444; margin-bottom:16px; max-width:720px; margin-inline:auto; }
+  .btns { display:flex; gap:12px; justify-content:center; flex-wrap:wrap; }
+  .btns a { background:#2575fc; color:#fff; padding:10px 18px; border-radius:999px; text-decoration:none; font-weight:600; }
 
-    .buttons {
-      display: flex;
-      gap: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
-    }
+  footer{
+    position: fixed;
+    left:0;
+    right:0;
+    bottom:10px;
+    text-align:center;
+    z-index: 60;
+    color:#666;
+    font-size:0.9rem;
+    background: rgba(255,255,255,0.0);
+    pointer-events: none;
+  }
 
-    a {
-      text-decoration: none;
-      background: white;
-      color: #2575fc;
-      padding: 12px 24px;
-      border-radius: 30px;
-      font-weight: bold;
-      transition: 0.3s;
-    }
+  /* logos layer sits behind card but above background */
+  #logosLayer {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    overflow: hidden;
+  }
 
-    a:hover {
-      background: #2575fc;
-      color: white;
-    }
+  .brand {
+    position: absolute;
+    will-change: transform, opacity;
+    pointer-events: none;
+    filter: drop-shadow(0 8px 18px rgba(0,0,0,0.08));
+  }
 
-    footer {
-      position: absolute;
-      bottom: 10px;
-      font-size: 0.9rem;
-      color: rgba(255, 255, 255, 0.8);
-    }
-  </style>
+  .brand img {
+    display:block;
+    width:100%;
+    height:auto;
+    object-fit:contain;
+    border-radius:6px;
+  }
+
+  /* vertical rise animation; each element gets random duration/delay */
+  @keyframes riseForever {
+    0%   { transform: translate3d(0, 110vh, 0) rotate(0deg); }
+    100% { transform: translate3d(0, -120vh, 0) rotate(360deg); }
+  }
+
+  @media (max-width:640px){
+    h1{font-size:1.6rem}
+  }
+</style>
 </head>
 <body>
-  <h1>Welcome to My Assignment Blog</h1>
-  <p>A space where I upload my college assignments, projects, and notes. Explore and learn along with me!</p>
+  <div id="logosLayer" aria-hidden="true"></div>
 
-  <div class="buttons">
-    <a href="assignments.html">📂 View Assignments</a>
-    <a href="about.html">👤 About Me</a>
+  <div class="card" role="main" aria-label="Main content">
+    <h1>Welcome to My Assignment Blog</h1>
+    <p>A space where I upload my college assignments, projects, and notes — now with a colourful, verified brand wall in the background.</p>
+    <div class="btns">
+      <a href="assignments.html">📂 View Assignments</a>
+      <a href="about.html">👤 About Me</a>
+    </div>
   </div>
 
-  <footer>
-    © 2025 My Assignment Blog
-  </footer>
+  <footer>© 2025 My Assignment Blog — All trademarks belong to their respective owners.</footer>
+
+<script>
+/*
+  Robust loader: tries multiple candidate URLs per brand, only appends images that actually load.
+  If a brand fails all candidates it is quietly skipped and logged to console.
+*/
+
+const brandCandidates = {
+  /* curated premium set with multiple candidate URLs (CDN + Wikimedia fallbacks). 
+     You can add/remove brands here. Each key is a friendly name used for logging. */
+  "Apple": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/apple.svg",
+    "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/apple.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg"
+  ],
+  "Microsoft": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/microsoft.svg",
+    "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/microsoft.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/9/96/Microsoft_logo_%282012%29.svg"
+  ],
+  "Google": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/google.svg",
+    "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/google.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg"
+  ],
+  "Tesla": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/tesla.svg",
+    "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/tesla.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/b/bb/Tesla_T_symbol.svg"
+  ],
+  "Coca-Cola": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/cocacola.svg",
+    "https://cdn.jsdelivr.net/gh/simple-icons/simple-icons/icons/cocacola.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/4/4f/Coca-Cola_logo.svg"
+  ],
+  "Amul": [
+    "https://upload.wikimedia.org/wikipedia/commons/a/ab/Amul_official_logo.svg"
+  ],
+  "Tata": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/tata.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/3/3a/Logo_Tata.svg"
+  ],
+  "Nike": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/nike.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/a/a6/Nike_logo.svg"
+  ],
+  "Meta": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/meta.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/5/51/Meta_Platforms_Inc._logo.svg"
+  ],
+  "Amazon": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/amazon.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/a/a9/Amazon_logo.svg"
+  ],
+  "Spotify": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/spotify.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/1/19/Spotify_logo_with_text.svg"
+  ],
+  "Netflix": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/netflix.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/0/08/Netflix_2015_logo.svg"
+  ],
+  "Infosys": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/infosys.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/8/85/Infosys_logo.svg"
+  ],
+  "Wipro": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/wipro.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/7/7a/Wipro_logo.svg"
+  ],
+  "Adobe": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/adobe.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/d/d7/Adobe_Corporate_Logo.svg"
+  ],
+  "Intel": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/intel.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/0/02/Intel_logo_%282020%29.svg"
+  ],
+  "Nvidia": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/nvidia.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/2/21/Nvidia_logo.svg"
+  ],
+  "IBM": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/ibm.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/5/51/IBM_logo.svg"
+  ],
+  "Starbucks": [
+    "https://upload.wikimedia.org/wikipedia/commons/0/0f/Starbucks_Corporation_Logo_2011.svg"
+  ],
+  "McDonalds": [
+    "https://upload.wikimedia.org/wikipedia/commons/7/7c/McDonald%27s_Golden_Arches.svg"
+  ],
+  "KFC": [
+    "https://upload.wikimedia.org/wikipedia/commons/8/89/KFC_logo.svg"
+  ],
+  "Pepsi": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/pepsi.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/7/79/Pepsi_logo_2014.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/7/7f/Pepsi_logo_2014_new.svg"
+  ],
+  "Airbnb": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/airbnb.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/6/69/Airbnb_Logo_B%C3%A9lo.svg"
+  ],
+  "Uber": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/uber.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/c/cc/Uber_logo_2018.svg"
+  ],
+  "Flipkart": [
+    "https://upload.wikimedia.org/wikipedia/commons/6/63/Flipkart_Logo.svg"
+  ],
+  "Myntra": [
+    "https://upload.wikimedia.org/wikipedia/commons/3/30/Myntra_logo.svg"
+  ],
+  "Maruti Suzuki": [
+    "https://upload.wikimedia.org/wikipedia/commons/1/13/Maruti_Suzuki_logo.svg"
+  ],
+  "Mercedes": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/mercedes.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/9/90/Mercedes-Benz_logo_2010.svg"
+  ],
+  "Audi": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/audi.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/6/6f/Audi_logo_2016.svg"
+  ],
+  "BMW": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/bmw.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/4/44/BMW.svg"
+  ],
+  "Volvo": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/volvo.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/3/30/Volvo_Iron-Mark.svg"
+  ],
+  "Sony": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/sony.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/2/2f/Sony_logo.svg"
+  ],
+  "Dell": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/dell.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/4/44/Dell_Logo.svg"
+  ],
+  "HP": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/hp.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/0/0b/HP_logo_2012.svg"
+  ],
+  "PayPal": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/paypal.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/5/5e/PayPal_logo_2014.svg"
+  ],
+  "Amara Raja": [
+    "https://upload.wikimedia.org/wikipedia/commons/b/bc/Amara_Raja_Batteries_logo.png"
+  ],
+  "Adani": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/adani.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/4/4e/Adani_Group_logo.svg"
+  ],
+  "HDFC Bank": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/hdfcbank.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/9/9f/HDFC_Bank_logo.svg"
+  ],
+  "ICICI Bank": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/icicibank.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/e/e8/ICICI_Bank_logo.svg"
+  ],
+  "SBI": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/sbi.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/9/9e/SBI_logo.svg"
+  ],
+  "LIC": [
+    "https://cdn.jsdelivr.net/npm/simple-icons@latest/icons/lic.svg",
+    "https://upload.wikimedia.org/wikipedia/commons/4/44/LIC_India_logo.svg"
+  ]
+}; // end brandCandidates
+
+const layer = document.getElementById('logosLayer');
+const failedBrands = [];
+
+// helper: test if image loads within timeout
+function testImageURL(url, timeout = 6000){
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    let done = false;
+    const timer = setTimeout(()=> {
+      if (done) return;
+      done = true;
+      img.src = ''; // cancel
+      reject(new Error('timeout'));
+    }, timeout);
+
+    img.onload = function(){
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      resolve(url);
+    };
+    img.onerror = function(){
+      if (done) return;
+      done = true;
+      clearTimeout(timer);
+      reject(new Error('error'));
+    };
+    // avoid sending referrer, reduce CORS noise
+    img.referrerPolicy = 'no-referrer';
+    img.decoding = 'async';
+    img.src = url;
+  });
+}
+
+// try candidates sequentially; return first working URL or null
+async function findWorkingURL(candidates){
+  for (const url of candidates){
+    try{
+      await testImageURL(url);
+      return url;
+    }catch(e){
+      // try next
+    }
+  }
+  return null;
+}
+
+// create and place brand element once we have a working URL
+function placeBrand(url, friendlyName){
+  const wrapper = document.createElement('div');
+  wrapper.className = 'brand';
+
+  const img = document.createElement('img');
+  img.src = url;
+  img.alt = friendlyName;
+  img.loading = 'lazy';
+  img.decoding = 'async';
+
+  // random size/position
+  const vw = Math.max(document.documentElement.clientWidth || 360, 360);
+  const size = Math.round(48 + Math.random()*80); // px
+  wrapper.style.width = size + 'px';
+  wrapper.style.left = Math.round(Math.random()*92) + '%';
+  wrapper.style.top = Math.round(Math.random()*92) + '%';
+  wrapper.style.opacity = (0.7 + Math.random()*0.3).toFixed(2);
+
+  // animation duration/delay (negative delay for immediate motion)
+  const duration = 24 + Math.random()*28; // seconds
+  const delay = -Math.random()*duration;
+  wrapper.style.animation = `riseForever ${duration}s linear ${delay}s infinite`;
+
+  wrapper.appendChild(img);
+  layer.appendChild(wrapper);
+
+  // subtle horizontal oscillation via RAF
+  const amplitude = 6 + Math.random()*28;
+  const speed = 0.0009 + Math.random()*0.0014;
+  const start = performance.now();
+  function drift(now){
+    const t = now - start;
+    const x = Math.sin(t * speed) * amplitude;
+    wrapper.style.transform = `translate3d(${x}px,0,0)`;
+    requestAnimationFrame(drift);
+  }
+  requestAnimationFrame(drift);
+}
+
+// main populate loop: try each brand; append only if working
+(async function populate(){
+  const entries = Object.entries(brandCandidates);
+  for (let i=0;i<entries.length;i++){
+    const [friendly, urls] = entries[i];
+    const working = await findWorkingURL(urls);
+    if (working){
+      placeBrand(working, friendly);
+    } else {
+      failedBrands.push(friendly);
+    }
+  }
+
+  // report summary (visible in console)
+  if (failedBrands.length){
+    console.info('Some brand logos were not available from public sources and were skipped:', failedBrands);
+    // Suggestion to user: self-host these if you want them shown.
+  } else {
+    console.info('All requested brand logos loaded successfully.');
+  }
+})();
+</script>
+
 </body>
 </html>
